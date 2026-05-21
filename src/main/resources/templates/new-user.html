@@ -7,7 +7,7 @@
 <body>
 <h1>Создание нового пользователя</h1>
 
-<form th:action="@{/users}" th:object="${user}" method="post">
+<form th:action="@{/admin/users}" th:object="${user}" method="post">
     Имя: <input type="text" th:field="*{name}" pattern="[A-Za-zА-Яа-я]+"><br>
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></span>
     <br>
@@ -20,6 +20,6 @@
     <input type="submit" value="Сохранить!">
 </form>
 <br>
-<a th:href="@{/users}">Назад к списку</a>
+<a th:href="@{/admin/users}">Назад к списку</a>
 </body>
 </html>

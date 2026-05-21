@@ -24,10 +24,10 @@
         <td th:text="${user.lastName}"></td>
         <td th:text="${user.age}"></td>
         <td>
-            <form th:action="@{/users/{id}/edit(id=${user.id})}" method="get" style="display:inline">
+            <form th:action="@{/admin/users/{id}/edit(id=${user.id})}" method="get" style="display:inline">
                 <button type="submit">Редактировать</button>
             </form>
-            <form th:action="@{/users/{id}/delete(id=${user.id})}" method="post" style="display:inline">
+            <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post" style="display:inline">
                 <button type="submit">Удалить</button>
             </form>
         </td>
@@ -36,7 +36,7 @@
 </table>
 
 <br>
-<a th:href="@{/users/new}">Добавить нового пользователя</a>
+<a th:href="@{/admin/users/new}">Добавить нового пользователя</a>
 <form th:action="@{/logout}" method="post">
     <button type="submit">Выйти</button>
 </form>
