@@ -41,13 +41,13 @@ public class DataInitializer implements CommandLineRunner {
 
         User admin = new User("Slava", "Pan", 31);
         admin.setRoles(Set.of(adminRole));
-        admin.setUsername("span");
+        admin.setUsername("admin");
         admin.setPassword(adminRolePassword);
         userRepository.save(admin);
 
         User user = new User("Andrey", "Pan", 23);
         user.setRoles(Set.of(userRole));
-        user.setUsername("apan");
+        user.setUsername("user");
         user.setPassword(userRolePassword);
         userRepository.save(user);
     }

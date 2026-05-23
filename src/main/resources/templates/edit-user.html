@@ -9,14 +9,18 @@
 
 <form th:action="@{/admin/users/{id}(id=${user.id})}" th:object="${user}" method="post">
     <input type="hidden" th:field="*{id}">
-    Имя: <input type="text" th:field="*{name}" pattern="[A-Za-zА-Яа-я]+">
+    Имя: <input type="text" th:field="*{name}" pattern="[A-Za-zА-Яа-я]+"><br>
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></span>
     <br>
-    Фамилия: <input type="text" th:field="*{lastName}" pattern="[A-Za-zА-Яа-я]+">
+    Фамилия: <input type="text" th:field="*{lastName}" pattern="[A-Za-zА-Яа-я]+"><br>
     <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red"></span>
     <br>
-    Возраст: <input type="number" th:field="*{age}">
+    Возраст: <input type="number" th:field="*{age}"><br>
     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red"></span>
+    <br>
+    Логин: <input type="text" th:field="*{username}"><br>
+    <br>
+    Пароль: <input type="password" th:field="*{password}"><br>
     <br>
     <input type="submit" value="Сохранить!">
 </form>
