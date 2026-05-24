@@ -21,6 +21,12 @@
     <br>
     Пароль: <input type="password" th:field="*{password}"><br>
     <br>
+    Роли:<br>
+    <div th:each="role : ${allRoles}">
+        <input type="checkbox" name="roleIds" th:value="${role.id}">
+        <label th:text="${role.name}"></label>
+    </div>
+    <br>
     <input type="submit" value="Сохранить!">
 </form>
 <br>
