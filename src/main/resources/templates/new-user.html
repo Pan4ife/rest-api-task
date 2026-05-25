@@ -18,13 +18,21 @@
     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red"></span>
     <br>
     Логин: <input type="text" th:field="*{username}"><br>
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
     <br>
     Пароль: <input type="password" th:field="*{password}"><br>
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
     <br>
     Роли:<br>
     <div th:each="role : ${allRoles}">
         <input type="checkbox" name="roleIds" th:value="${role.id}">
         <label th:text="${role.name}"></label>
+    </div>
+    <br>
+    <div th:if="${#fields.hasGlobalErrors()}">
+    <span th:each="err : ${#fields.globalErrors()}"
+          th:text="${err}"
+          style="color: red"></span>
     </div>
     <br>
     <input type="submit" value="Сохранить!">

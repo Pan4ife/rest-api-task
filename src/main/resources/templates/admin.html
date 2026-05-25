@@ -14,6 +14,7 @@
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Возраст</th>
+        <th>Роли</th>
         <th>Действия</th>
     </tr>
     </thead>
@@ -23,6 +24,7 @@
         <td th:text="${user.name}"></td>
         <td th:text="${user.lastName}"></td>
         <td th:text="${user.age}"></td>
+        <td><span th:each="role: ${user.roles}" th:text="${role.name + ' '}"></span></td>
         <td>
             <form th:action="@{/admin/users/{id}/edit(id=${user.id})}" method="get" style="display:inline">
                 <button type="submit">Редактировать</button>

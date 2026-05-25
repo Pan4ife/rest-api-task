@@ -45,8 +45,13 @@ public class AdminController {
     @PostMapping
     public String createUser(@ModelAttribute("user") @Valid User user,
                              BindingResult bindingResult,
-                             @RequestParam(value = "roleIds", required = false) List<Long> roleIds) {
+                             @RequestParam(value = "roleIds", required = false) List<Long> roleIds,
+                             ModelMap modelMap) {
+        if (roleIds == null || roleIds.isEmpty()) {
+            bindingResult.reject("noRoles", "Необходимо выбрать хотя бы одну роль");
+        }
         if (bindingResult.hasErrors()) {
+            modelMap.addAttribute("allRoles", roleRepository.findAll());
             return "new-user";
         }
         userService.addUser(user, roleIds);
@@ -72,9 +77,16 @@ public class AdminController {
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") @Valid UserEditDto dto, BindingResult bindingResult) {
+    public String updateUser(@PathVariable("id") Long id,
+                             @ModelAttribute("user") @Valid UserEditDto dto,
+                             BindingResult bindingResult,
+                             ModelMap modelMap) {
         dto.setId(id);
+        if (dto.getRoleIds() == null || dto.getRoleIds().isEmpty()) {
+            bindingResult.reject("noRoles", "Необходимо выбрать хотя бы одну роль");
+        }
         if (bindingResult.hasErrors()) {
+            modelMap.addAttribute("allRoles", roleRepository.findAll());
             return "edit-user";
         }
         userService.updateUser(dto);

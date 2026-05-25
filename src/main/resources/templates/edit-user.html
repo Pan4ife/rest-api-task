@@ -9,25 +9,39 @@
 
 <form th:action="@{/admin/users/{id}(id=${user.id})}" th:object="${user}" method="post">
     <input type="hidden" th:field="*{id}">
-    Имя: <input type="text" th:field="*{name}" pattern="[A-Za-zА-Яа-я]+"><br>
+    <label style="display: inline-block; width: 75px;">Имя:</label>
+    <input type="text" th:field="*{name}" pattern="[A-Za-zА-Яа-я]+"><br>
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></span>
     <br>
-    Фамилия: <input type="text" th:field="*{lastName}" pattern="[A-Za-zА-Яа-я]+"><br>
+    <label style="display: inline-block; width: 75px;">Фамилия:</label>
+    <input type="text" th:field="*{lastName}" pattern="[A-Za-zА-Яа-я]+"><br>
     <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red"></span>
     <br>
-    Возраст: <input type="number" th:field="*{age}"><br>
+    <label style="display: inline-block; width: 75px;">Возраст:</label>
+    <input type="number" th:field="*{age}"><br>
     <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" style="color: red"></span>
     <br>
-    Логин: <input type="text" th:field="*{username}"><br>
+    <label style="display: inline-block; width: 75px;">Логин:</label>
+    <input type="text" th:field="*{username}"><br>
+    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
     <br>
-    Пароль: <input type="password" th:field="*{password}"><br>
+    <label style="display: inline-block; width: 75px;">Пароль:</label>
+    <input type="password" th:field="*{password}"><br>
+    <small style="color: gray">Оставьте пустым, если не хотите менять пароль</small>
+    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
     <br>
-    Роли:<br>
+    <label style="display: inline-block; width: 20px;">Роли:</label><br>
     <div th:each="role : ${allRoles}">
         <input type="checkbox" name="roleIds"
                th:value="${role.id}"
                th:checked="${user.roleIds != null && user.roleIds.contains(role.id)}">
         <label th:text="${role.name}"></label>
+    </div>
+    <br>
+    <div th:if="${#fields.hasGlobalErrors()}">
+    <span th:each="err : ${#fields.globalErrors()}"
+          th:text="${err}"
+          style="color: red"></span>
     </div>
     <br>
     <input type="submit" value="Сохранить!">

@@ -43,7 +43,10 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @Column(unique = true)
+    @NotBlank(message = "Логин не должег быть пустым")
+    @Size(min = 1, max = 50, message = "Логин должен содержать от 1 до 50 символов")
     private String username;
+    @NotBlank(message = "Пароль не должен быть пустым")
     private String password;
 
     public User(){}
