@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -34,5 +36,17 @@ public class Role implements GrantedAuthority {
     @Override
     public @Nullable String getAuthority() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(getName(), role.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName());
     }
 }

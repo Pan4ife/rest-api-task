@@ -17,7 +17,7 @@
                th:text="${#strings.replace(role.authority, 'ROLE_', '')}"></span>]
         </span>
         <form th:action="@{/logout}" method="post">
-            <button class="btn btn-danger"> Logout</button>
+            <button class="btn btn-secondary"> Logout</button>
         </form>
     </div>
 </nav>

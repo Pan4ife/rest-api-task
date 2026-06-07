@@ -49,7 +49,8 @@ public class User implements UserDetails {
     @NotBlank(message = "Пароль не должен быть пустым")
     private String password;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String name, String lastName, Integer age) {
         this.name = name;
@@ -127,25 +128,5 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }
