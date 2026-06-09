@@ -9,8 +9,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 
 
 @Controller
@@ -45,7 +46,10 @@ public class AdminController {
                              ModelMap modelMap) {
         String activeTab = "new-user";
         if (roleIds == null || roleIds.isEmpty()) {
-            bindingResult.reject("noRoles", "Необходимо выбрать хотя бы одну роль");
+            bindingResult.reject("noRoles", "At least one role must be selected");
+        }
+        if (userService.findByUsername(user.getUsername()) != null) {
+            bindingResult.rejectValue("username", "duplicate", "User with this username already exists");
         }
         if (bindingResult.hasErrors()) {
             List<User> users = userService.getAllUsers();
@@ -62,10 +66,16 @@ public class AdminController {
     @PostMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id,
                              @ModelAttribute("user") @Valid UserEditDto dto,
-                             BindingResult bindingResult) {
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
+        User usernameOwner = userService.findByUsername(dto.getUsername());
         dto.setId(id);
         if (dto.getRoleIds() == null || dto.getRoleIds().isEmpty()) {
-            bindingResult.reject("noRoles", "Необходимо выбрать хотя бы одну роль");
+            bindingResult.reject("noRoles", "At least one role must be selected");
+        }
+        if (usernameOwner != null && !usernameOwner.getId().equals(dto.getId())) {
+            redirectAttributes.addFlashAttribute("usernameError", "User with this username already exists");
+            return "redirect:/admin/users";
         }
         if (bindingResult.hasErrors()) {
             return "redirect:/admin/users";

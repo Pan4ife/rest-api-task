@@ -17,22 +17,22 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Имя не должно быть пустым")
-    @Size(min = 1, max = 50, message = "Имя должно быть от 1 до 50 символов")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Имя должно содержать только буквы")
+    @NotBlank(message = "Name must not be empty")
+    @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Name must contain only letters")
     @Column
     private String name;
 
-    @NotBlank(message = "Фамилия не должна быть пустой")
-    @Size(min = 1, max = 50, message = "Фамилия должна быть от 1 до 50 символов")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Фамилия должно содержать только буквы")
+    @NotBlank(message = "Last name must not be empty")
+    @Size(min = 1, max = 50, message = "Last name must be between 1 and 50 characters")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]+$", message = "Last name must contain only letters")
     @Column
     private String lastName;
 
     @Column
-    @NotNull(message = "Возраст обязателен")
-    @Min(value = 1, message = "Возраст не может быть отрицательным или 0")
-    @Max(value = 150, message = "Возраст не может превышать 150")
+    @NotNull(message = "Age is required")
+    @Min(value = 1, message = "Age cannot be 0")
+    @Max(value = 150, message = "Age limit is 120")
     private Integer age;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -43,10 +43,10 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @Column(unique = true)
-    @NotBlank(message = "Логин не должег быть пустым")
-    @Size(min = 1, max = 50, message = "Логин должен содержать от 1 до 50 символов")
+    @NotBlank(message = "Login must not be empty")
+    @Size(min = 1, max = 50, message = "Login must be between 1 and 50 characters")
     private String username;
-    @NotBlank(message = "Пароль не должен быть пустым")
+    @NotBlank(message = "Password must not be empty")
     private String password;
 
     public User() {

@@ -24,10 +24,9 @@
 
 <!-----Sidebar----->
 <div th:fragment="sidebar(activePage)" class="sidebar sidebar-narrow border-end bg-white vh-100"
-     style="width: 200px"
-     data-bs-theme="dark">
-    <div class="container-fluid">
-        <div sec:authorize="hasRole('ADMIN')" >
+     style="width: 200px">
+    <div>
+        <div sec:authorize="hasRole('ADMIN')">
             <a th:class="${activePage == 'admin' ? 'btn btn-primary w-100' : 'btn btn-outline-primary w-100'}"
                th:href="@{/admin/users}">Admin</a>
         </div>
