@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.util.Set;
 
-public class UserEditDto {
+public class UserDto {
     private Long id;
 
     @NotBlank(message = "Имя не должно быть пустым")
@@ -30,7 +30,7 @@ public class UserEditDto {
 
     private Set<Long> roleIds;
 
-    public UserEditDto() {
+    public UserDto() {
     }
 
     public Set<Long> getRoleIds() {

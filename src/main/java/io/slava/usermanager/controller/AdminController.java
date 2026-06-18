@@ -1,6 +1,6 @@
 package io.slava.usermanager.controller;
 
-import io.slava.usermanager.dto.UserEditDto;
+import io.slava.usermanager.dto.UserDto;
 import io.slava.usermanager.model.User;
 import io.slava.usermanager.repository.RoleRepository;
 import io.slava.usermanager.service.UserService;
@@ -39,55 +39,55 @@ public class AdminController {
     }
 
 
-    @PostMapping
-    public String createUser(@ModelAttribute("user") @Valid User user,
-                             BindingResult bindingResult,
-                             @RequestParam(value = "roleIds", required = false) List<Long> roleIds,
-                             ModelMap modelMap) {
-        String activeTab = "new-user";
-        if (roleIds == null || roleIds.isEmpty()) {
-            bindingResult.reject("noRoles", "At least one role must be selected");
-        }
-        if (userService.findByUsername(user.getUsername()) != null) {
-            bindingResult.rejectValue("username", "duplicate", "User with this username already exists");
-        }
-        if (bindingResult.hasErrors()) {
-            List<User> users = userService.getAllUsers();
-            modelMap.addAttribute("activeTab", activeTab);
-            modelMap.addAttribute("users", users);
-            modelMap.addAttribute("allRoles", roleRepository.findAll());
-            return "admin";
-        }
-        userService.addUser(user, roleIds);
-        return "redirect:/admin/users";
-    }
-
-
-    @PostMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id,
-                             @ModelAttribute("user") @Valid UserEditDto dto,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
-        User usernameOwner = userService.findByUsername(dto.getUsername());
-        dto.setId(id);
-        if (dto.getRoleIds() == null || dto.getRoleIds().isEmpty()) {
-            bindingResult.reject("noRoles", "At least one role must be selected");
-        }
-        if (usernameOwner != null && !usernameOwner.getId().equals(dto.getId())) {
-            redirectAttributes.addFlashAttribute("usernameError", "User with this username already exists");
-            return "redirect:/admin/users";
-        }
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin/users";
-        }
-        userService.updateUser(dto);
-        return "redirect:/admin/users";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteById(id);
-        return "redirect:/admin/users";
-    }
+//    @PostMapping
+//    public String createUser(@ModelAttribute("user") @Valid User user,
+//                             BindingResult bindingResult,
+//                             @RequestParam(value = "roleIds", required = false) List<Long> roleIds,
+//                             ModelMap modelMap) {
+//        String activeTab = "new-user";
+//        if (roleIds == null || roleIds.isEmpty()) {
+//            bindingResult.reject("noRoles", "At least one role must be selected");
+//        }
+//        if (userService.findByUsername(user.getUsername()) != null) {
+//            bindingResult.rejectValue("username", "duplicate", "User with this username already exists");
+//        }
+//        if (bindingResult.hasErrors()) {
+//            List<User> users = userService.getAllUsers();
+//            modelMap.addAttribute("activeTab", activeTab);
+//            modelMap.addAttribute("users", users);
+//            modelMap.addAttribute("allRoles", roleRepository.findAll());
+//            return "admin";
+//        }
+//        userService.addUser(user    );
+//        return "redirect:/admin/users";
+//    }
+//
+//
+//    @PostMapping("/{id}")
+//    public String updateUser(@PathVariable("id") Long id,
+//                             @ModelAttribute("user") @Valid UserDto dto,
+//                             BindingResult bindingResult,
+//                             RedirectAttributes redirectAttributes) {
+//        User usernameOwner = userService.findByUsername(dto.getUsername());
+//        dto.setId(id);
+//        if (dto.getRoleIds() == null || dto.getRoleIds().isEmpty()) {
+//            bindingResult.reject("noRoles", "At least one role must be selected");
+//        }
+//        if (usernameOwner != null && !usernameOwner.getId().equals(dto.getId())) {
+//            redirectAttributes.addFlashAttribute("usernameError", "User with this username already exists");
+//            return "redirect:/admin/users";
+//        }
+//        if (bindingResult.hasErrors()) {
+//            return "redirect:/admin/users";
+//        }
+//        userService.updateUser(dto);
+//        return "redirect:/admin/users";
+//    }
+//
+//    @PostMapping("/{id}/delete")
+//    public String deleteUser(@PathVariable("id") Long id) {
+//        userService.deleteById(id);
+//        return "redirect:/admin/users";
+//    }
 
 }

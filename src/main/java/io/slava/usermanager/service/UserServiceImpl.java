@@ -1,6 +1,6 @@
 package io.slava.usermanager.service;
 
-import io.slava.usermanager.dto.UserEditDto;
+import io.slava.usermanager.dto.UserDto;
 import io.slava.usermanager.model.Role;
 import io.slava.usermanager.model.User;
 import io.slava.usermanager.repository.RoleRepository;
@@ -28,14 +28,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user, List<Long> roleIds) {
-        String userPassword = user.getPassword();
-        user.setPassword(passwordEncoder.encode(userPassword));
-        if (roleIds != null && !roleIds.isEmpty()) {
-            Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(roleIds));
+    public User addUser(UserDto dto) {
+        User user = new User();
+        user.setName(dto.getName());
+        user.setLastName(dto.getLastName());
+        user.setAge(dto.getAge());
+        user.setUsername(dto.getUsername());
+        String userPassword = passwordEncoder.encode(dto.getPassword());
+        user.setPassword(userPassword);
+        if (dto.getRoleIds() != null && !dto.getRoleIds().isEmpty()) {
+            Set<Role> newRoles = new HashSet<>(roleRepository.findAllById(dto.getRoleIds()));
             user.setRoles(newRoles);
         }
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UserEditDto dto) {
+    public User updateUser(UserDto dto) {
         User user = findById(dto.getId());
         user.setName(dto.getName());
         user.setLastName(dto.getLastName());
@@ -67,7 +72,7 @@ public class UserServiceImpl implements UserService {
             newRoles = new HashSet<>();
         }
         user.setRoles(newRoles);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
