@@ -5,7 +5,9 @@ import io.slava.usermanager.dto.UserDto;
 import io.slava.usermanager.model.User;
 import io.slava.usermanager.repository.RoleRepository;
 import io.slava.usermanager.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -31,21 +33,48 @@ public class AdminRestController {
     }
 
     @PostMapping
-    public ResponseEntity<UserApiResponseDto> createUser(@RequestBody UserDto dto) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto dto,
+                                                             BindingResult bindingResult
+                                                         ) {
+
+        if(bindingResult.hasErrors()){
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+        if(userService.findByUsername(dto.getUsername()) != null){
+            return ResponseEntity.badRequest().body("User with this username already exists");
+        }
         User newUser = userService.addUser(dto);
         return ResponseEntity.
                 created(URI.create("/api/users/" + newUser.getId()))
                 .body(toResponseDto(newUser));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserApiResponseDto> getUser(@PathVariable Long id){
+        User userForUpdate = userService.findById(id);
+        if (userForUpdate == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(toResponseDto(userForUpdate));
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserApiResponseDto> updateUser(@PathVariable Long id,
-                                           @RequestBody UserDto dto) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id,
+                                        @Valid @RequestBody UserDto dto,
+                                        BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
         User existingUser = userService.findById(id);
         if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
+        User usernameOwner = userService.findByUsername(dto.getUsername());
         dto.setId(id);
+        if(usernameOwner != null && !usernameOwner.getId().equals(dto.getId())){
+            return ResponseEntity.badRequest().body("User with this username already exists");
+        }
         User updatedUser = userService.updateUser(dto);
         return ResponseEntity.ok(toResponseDto(updatedUser));
     }
