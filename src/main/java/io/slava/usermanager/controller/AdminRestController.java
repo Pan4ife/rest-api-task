@@ -34,25 +34,29 @@ public class AdminRestController {
 
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDto dto,
-                                                             BindingResult bindingResult
-                                                         ) {
+                                        BindingResult bindingResult
+    ) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             return ResponseEntity.badRequest().body(errorMessage);
         }
-        if(userService.findByUsername(dto.getUsername()) != null){
+        if (userService.findByUsername(dto.getUsername()) != null) {
             return ResponseEntity.badRequest().body("User with this username already exists");
+        }
+        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            return ResponseEntity.badRequest().body("Password can not be empty");
         }
         User newUser = userService.addUser(dto);
         return ResponseEntity.
                 created(URI.create("/api/users/" + newUser.getId()))
                 .body(toResponseDto(newUser));
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<UserApiResponseDto> getUser(@PathVariable Long id){
+    public ResponseEntity<UserApiResponseDto> getUser(@PathVariable Long id) {
         User userForUpdate = userService.findById(id);
-        if (userForUpdate == null){
+        if (userForUpdate == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(toResponseDto(userForUpdate));
@@ -62,7 +66,7 @@ public class AdminRestController {
     public ResponseEntity<?> updateUser(@PathVariable Long id,
                                         @Valid @RequestBody UserDto dto,
                                         BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError().getDefaultMessage();
             return ResponseEntity.badRequest().body(errorMessage);
         }
@@ -72,7 +76,7 @@ public class AdminRestController {
         }
         User usernameOwner = userService.findByUsername(dto.getUsername());
         dto.setId(id);
-        if(usernameOwner != null && !usernameOwner.getId().equals(dto.getId())){
+        if (usernameOwner != null && !usernameOwner.getId().equals(dto.getId())) {
             return ResponseEntity.badRequest().body("User with this username already exists");
         }
         User updatedUser = userService.updateUser(dto);

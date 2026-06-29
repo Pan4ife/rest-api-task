@@ -195,10 +195,19 @@
             container.appendChild(div);
         });
     }
-
+    //Delete
     async function deleteUser(id) {
-        await fetch(`/api/users/${id}`, {method: 'DELETE'});
-        loadUsers();
+        if (!confirm('Delete this user?')){
+            return;
+        }
+        const response = await fetch(`/api/users/${id}`, {method: 'DELETE'})
+
+        if (response.ok){
+            loadUsers();
+        }
+        else {
+            alert('Cannot delete user')
+        }
     }
 
     // Create From JS
@@ -228,17 +237,13 @@
         });
 
         if (response.ok) {
-            createForm.reset();
+            createForm.reset(); //очистка формы после отправки.
             loadUsers();
             document.getElementById('nav-home-tab').click();
         } else {
             const errorMessage = await response.text();
             alert('Ошибка: ' + errorMessage);
         }
-
-        createForm.reset(); //очиска формы после отправки.
-        loadUsers();
-        document.getElementById('nav-home-tab').click();
     });
 
     // Opening edit modal with user's fields by his id. Get mapping /api/users/id
@@ -307,9 +312,6 @@
             const errorMessage = await response.text();
             alert('Ошибка: ' + errorMessage);
         }
-
-        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-        loadUsers();
     });
     loadUsers();
     loadRoles();
