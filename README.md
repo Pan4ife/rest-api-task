@@ -1,4 +1,5 @@
 User Manager + REST API
+
 Bootstrap 사용자 관리 앱에 REST API를 도입하고, 관리자 화면을 JavaScript(fetch)로 API를 호출하는 방식으로 전환한 프로젝트입니다.
 Habsida 교육 과정 과제로 진행했습니다.
 주요 기능
